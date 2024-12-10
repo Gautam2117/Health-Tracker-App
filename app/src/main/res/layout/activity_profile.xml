@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/profile_personal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Personal Information"
+        android:textAlignment="center"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/profile_username_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Username"
+        android:paddingVertical="10dp"
+        android:textStyle="bold"
+        android:layout_gravity="left"
+        android:layout_marginLeft="40dp"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/profile_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="50dp"
+        android:background="@drawable/border"
+        android:inputType="text"
+        android:maxLines="1"
+        android:paddingVertical="10dp"
+        android:textAlignment="center" />
+
+    <TextView
+        android:id="@+id/profile_firstName_label"
+        android:layout_width="176dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="First Name"
+        android:paddingVertical="10dp"
+        android:layout_marginRight="250dp"
+        android:textStyle="bold"
+        android:layout_gravity="left"
+        android:layout_marginLeft="40dp"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/profile_firstName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:textAlignment="center"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:id="@+id/profile_lastName_label"
+        android:layout_width="176dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Last Name"
+        android:paddingVertical="10dp"
+        android:layout_marginRight="250dp"
+        android:textStyle="bold"
+        android:layout_gravity="left"
+        android:layout_marginLeft="40dp"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/profile_lastName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/border"
+        android:layout_marginTop="10dp"
+        android:paddingVertical="10dp"
+        android:textAlignment="center"
+        android:maxLines="1"
+        android:inputType="text"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:id="@+id/profile_emaillabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Email"
+        android:paddingVertical="10dp"
+        android:layout_marginRight="250dp"
+        android:textStyle="bold"
+        android:layout_gravity="left"
+        android:layout_marginLeft="40dp"
+        android:textSize="20dp"/>
+
+    <EditText
+        android:id="@+id/profile_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:paddingVertical="10dp"
+        android:textAlignment="center"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <TextView
+        android:id="@+id/profile_password_label"
+        android:layout_width="176dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left"
+        android:layout_marginLeft="40dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="250dp"
+        android:paddingVertical="10dp"
+        android:text="Password"
+        android:textSize="20dp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/profile_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/border"
+        android:paddingVertical="10dp"
+        android:textAlignment="center"
+        android:inputType="text"
+        android:maxLines="1"
+        android:layout_marginRight="50dp"
+        android:layout_marginLeft="50dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/profile_enableEdit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_enableEdit_button"
+            android:paddingHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+
+        <Button
+            android:id="@+id/profile_submitEdit_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_submitEdit_button"
+            android:paddingHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_gravity="center"
+            android:textStyle="bold"/>
+    </LinearLayout>
+
+
+</LinearLayout>

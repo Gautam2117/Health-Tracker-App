@@ -1,0 +1,192 @@
+package com.example.health_monitoring_app;
+
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.health_monitoring_app.POJO.Client;
+import com.kosalgeek.genasync12.AsyncResponse;
+import com.kosalgeek.genasync12.ExceptionHandler;
+import com.kosalgeek.genasync12.PostResponseAsyncTask;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
+public class ProfileActivity extends AppCompatActivity implements View.OnClickListener, BackgroundWorker.BackgroundWorkerResponse{
+
+    public static EditText usernameEt, firstNameEt, lastNameEt, passwordEt, emailEt;
+    public String loggedUsername;
+    BackgroundWorker backgroundWorker = new BackgroundWorker(this);
+    JSONObject jsonObject;
+    public Client clientInfo;
+    String currentUsername, currentPwd, currentFirstname, currentLastname, currentEmail, username;
+    String updateUsername, updatePwd, updateFirstName, updateLastName, updateEmail;
+    public int fetchedID, fetchedGpID;
+    public static final String LOG_TAG = "myLogs";
+
+    private Button enableEditBtn, submitEditBtn;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_profile);
+
+        usernameEt = (EditText) findViewById(R.id.profile_username);
+        firstNameEt = (EditText) findViewById(R.id.profile_firstName);
+        lastNameEt = (EditText) findViewById(R.id.profile_lastName);
+        passwordEt = (EditText) findViewById(R.id.profile_password);
+        emailEt = (EditText) findViewById(R.id.profile_email);
+
+        enableEditBtn = (Button) findViewById(R.id.profile_enableEdit_button);
+        enableEditBtn.setOnClickListener(this);
+        submitEditBtn = (Button) findViewById(R.id.profile_submitEdit_button);
+        submitEditBtn.setOnClickListener(this);
+
+        usernameEt.setFocusable(false);
+        firstNameEt.setFocusable(false);
+        lastNameEt.setFocusable(false);
+        passwordEt.setFocusable(false);
+        emailEt.setFocusable(false);
+
+        clientInfo = (Client) getIntent().getSerializableExtra("arg");
+        username = clientInfo.getUsername();;
+        fetchedID = clientInfo.getClientID();
+        clientInfo();
+
+//        currentUsername = clientInfo.getUsername();
+//        currentPwd = clientInfo.getPassword();
+//        currentFirstname = clientInfo.getFirstName();
+//        currentLastname = clientInfo.getLastName();
+//        currentEmail = clientInfo.getEmail();
+//        Log.e(LOG_TAG,"PROFILE" +clientInfo.getFirstName() + clientInfo.getLastName() +clientInfo.getGpID()+ clientInfo.getClientID());
+
+        Log.e(LOG_TAG,clientInfo.getUsername());
+//        usernameEt.setText(clientInfo.getUsername());
+//        firstNameEt.setText(clientInfo.getFirstName());
+//        lastNameEt.setText(clientInfo.getLastName());
+//        passwordEt.setText(clientInfo.getPassword());
+//        emailEt.setText(clientInfo.getEmail());
+    }
+
+    private void clientInfo() {
+        String type = "fetchProfileByID";
+        backgroundWorker.delegate = this;
+        backgroundWorker.execute(type, Integer.toString(fetchedID));
+    }
+
+    public void processFinish(String output) {
+        try {
+            Log.e(LOG_TAG,output);
+            String fetchedUsername, fetchedFirstName, fetechedLastName, fetchedPwd, fetchedEmail;
+
+            JSONArray jsonArr = new JSONArray(output);
+            JSONObject jsonObj = jsonArr.getJSONObject(0);
+            fetchedID = jsonObj.getInt("id");
+            currentUsername = jsonObj.getString("username");
+            currentFirstname = jsonObj.getString("first_name");
+            currentLastname = jsonObj.getString("last_name");
+            currentPwd = jsonObj.getString("password");
+            currentEmail = jsonObj.getString("email");
+            fetchedGpID = jsonObj.getInt("gp_id");
+            Log.e(LOG_TAG, "GP ID"+fetchedGpID);
+
+            clientInfo = new Client(fetchedID, currentUsername, currentFirstname, currentLastname, currentPwd, currentEmail, fetchedGpID);
+
+            usernameEt.setText(clientInfo.getUsername());
+            firstNameEt.setText(clientInfo.getFirstName());
+            lastNameEt.setText(clientInfo.getLastName());
+            passwordEt.setText(clientInfo.getPassword());
+            emailEt.setText(clientInfo.getEmail());
+            String clientInfoString = "Client's Fullname: " +clientInfo.getFirstName() + " " + clientInfo.getLastName() +
+                    "\n Client's Email: " + clientInfo.getEmail() + "\n Client's Username: " + clientInfo.getUsername();
+            Log.e(LOG_TAG,clientInfoString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.profile_enableEdit_button:
+                usernameEt.setFocusableInTouchMode(true);
+                usernameEt.setBackgroundResource(R.drawable.border_tint);
+                firstNameEt.setFocusableInTouchMode(true);
+                firstNameEt.setBackgroundResource(R.drawable.border_tint);
+                lastNameEt.setFocusableInTouchMode(true);
+                lastNameEt.setBackgroundResource(R.drawable.border_tint);
+                passwordEt.setFocusableInTouchMode(true);
+                passwordEt.setBackgroundResource(R.drawable.border_tint);
+                emailEt.setFocusableInTouchMode(true);
+                emailEt.setBackgroundResource(R.drawable.border_tint);
+                Log.e(LOG_TAG,"HELLO EDIT BUTTON CLICKED");
+                break;
+            case R.id.profile_submitEdit_button:
+                final String id = Integer.toString(fetchedID);
+                updateUsername = usernameEt.getText().toString();
+                updatePwd = passwordEt.getText().toString();
+                updateFirstName = firstNameEt.getText().toString();
+                updateLastName = lastNameEt.getText().toString();
+                updateEmail = emailEt.getText().toString();
+
+                if(currentUsername.equals(updateUsername) && currentPwd.equals(updatePwd) &&
+                        currentFirstname.equals(updateFirstName) && currentLastname.equals(updateLastName) &&
+                        currentEmail.equals(updateEmail)) {
+                    Toast.makeText(this, "All information are the same. Please change values if you wish to update your information.", Toast.LENGTH_SHORT).show();
+                }
+                else {
+                    HashMap<String, String> updateData = new HashMap<>();
+                    updateData.put("id", id);
+                    updateData.put("username", updateUsername);
+                    updateData.put("password", updatePwd);
+                    updateData.put("first_name", updateFirstName);
+                    updateData.put("last_name", updateLastName);
+                    updateData.put("email", updateEmail);
+
+                    PostResponseAsyncTask updateTask = new PostResponseAsyncTask(this,
+                            updateData, new AsyncResponse() {
+                        @Override
+                        public void processFinish(String s) {
+                            Log.d(LOG_TAG, s);
+                            if(s.contains("Record Updated Successfully")){
+                                SharedPreferences pref = getSharedPreferences("updateData", MODE_PRIVATE);
+                                SharedPreferences.Editor editor = pref.edit();
+                                editor.putString("id", id);
+                                editor.putString("username", updateUsername);
+                                editor.putString("password", updatePwd);
+                                editor.putString("first_name", updateFirstName);
+                                editor.putString("last_name", updateLastName);
+                                editor.putString("email", updateEmail);
+                                editor.commit();
+                                Toast.makeText(getApplicationContext(),
+                                        s, Toast.LENGTH_LONG).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(),
+                                        "Something went wrong. Cannot login.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    updateTask.setExceptionHandler(new ExceptionHandler() {
+                        @Override
+                        public void handleException(Exception e) {
+                            if(e != null && e.getMessage() != null){
+                                Log.d(LOG_TAG, e.getMessage());
+                            }
+                        }
+                    });
+                    updateTask.execute("http://192.168.1.66//client/updateUser.php");
+                    finish();
+                }
+                break;
+        }
+    }
+}
